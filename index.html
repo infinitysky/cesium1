@@ -82,7 +82,7 @@
                 //Some states have multiple entities, so we store the color in a
                 //hash so that we use the same color for the entire state.
                 var entity = entities[i];
-                var name = entity.name;
+                var name = entity.id;
                 var color = colorHash[name];
                 if (!color) {
                     color = Cesium.Color.fromRandom({
