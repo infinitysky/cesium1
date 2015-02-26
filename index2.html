@@ -271,10 +271,11 @@ WebGLGlobeDataSource.prototype.load = function(data) {
 
         //Now loop over each coordinate in the series and create
         // our entities from the data.
-        for (var i = 0; i < coordinates.length; i += 3) {
+        for (var i = 0; i < coordinates.length; i += 4) {
             var latitude = coordinates[i];
             var longitude = coordinates[i + 1];
-            var height = coordinates[i + 2];
+            var name = coordinates[i + 2];
+            var height = coordinates[i + 3];
 
             //Ignore lines of zero height.
             if(height === 0) {
@@ -295,7 +296,7 @@ WebGLGlobeDataSource.prototype.load = function(data) {
 
             //The polyline instance itself needs to be on an entity.
             var entity = new Cesium.Entity({
-                id : seriesName + ' index ' + i.toString(),
+                id : seriesName + ' : Postcode ' + name + ' = $' + height.formatMoney(0),
                 polyline : polyline,
                 seriesName : seriesName //Custom property to indicate series name
             });
@@ -352,6 +353,18 @@ if (typeof Cesium !== "undefined") {
 } else if (typeof require === "function") {
     require(["Cesium"], startup);
 }
+
+Number.prototype.formatMoney = function(c, d, t){
+  var n = this, 
+    c = isNaN(c = Math.abs(c)) ? 2 : c, 
+    d = d == undefined ? "." : d, 
+    t = t == undefined ? "," : t, 
+    s = n < 0 ? "-" : "", 
+    i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+    j = (j = i.length) > 3 ? j % 3 : 0;
+   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+  };
+
 </script>
 </body>
 </html>
